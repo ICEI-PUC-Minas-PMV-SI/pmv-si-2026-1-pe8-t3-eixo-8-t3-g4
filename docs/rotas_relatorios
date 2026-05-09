@@ -1,0 +1,51 @@
+Custos → GET /reports/costs, /costs/{projectId}/breakdown, POST /costs/export
+
+GET /reports/costs
+Objetivo: Listagem geral de custos de múltiplos projetos ou orçamentos, ideal para tabelas com filtros.
+Query Params: startDate, endDate, clientId, projectType, status.
+Retorno: Array de objetos com os totais por projeto/orçamento e meta-dados de paginação.
+
+GET /costs/{projectId}/breakdown
+Objetivo: Visão microscópica de um projeto específico.
+Path Param: projectId (Obrigatório).
+Retorno: Objeto detalhado quebrando os custos em categorias (insumos, mão de obra, taxas, margem de lucro aplicada).
+
+POST /costs/export
+Objetivo: Geração de arquivos físicos (PDF, CSV, Excel).
+Payload (Body): Filtros aplicados e o formato desejado ({ "format": "csv", "filters": {...} }).
+Retorno: Pode retornar o stream do arquivo binário diretamente ou um link (URL) para download, dependendo do volume de dados.
+
+
+
+Comparativos → GET /reports/comparison, /comparison/budget-vs-actual/{projectId}
+
+GET /reports/comparison
+Objetivo: Comparar orçamentos diferentes (ex: Versão A vs Versão B do mesmo projeto, ou Projetos similares).
+Query Params: budgetIds (ex: ?budgetIds=102,105).
+Retorno: Dados formatados lado a lado, calculando automaticamente a variação percentual ($\Delta \%$) entre os IDs fornecidos.
+
+GET /comparison/budget-vs-actual/{projectId}
+Objetivo: Atender especificamente ao RF015 (desvios entre previsto e real).
+Path Param: projectId.
+Query Params: minDeviation (ex: ?minDeviation=5 para trazer apenas itens que estouraram em mais de 5%).
+Retorno: Lista de insumos/etapas contendo o plannedValue, actualValue e o deviationAlert (booleano/enum).
+
+
+
+KPIs e Dashboard → GET /reports/kpis, /kpis/timeseries, /dashboard/summary
+
+GET /reports/kpis
+Objetivo: Retornar os "cards" numéricos de desempenho (ex: Rentabilidade média, Taxa de conversão de orçamentos).
+Query Params: period (mês, trimestre, ano).
+Retorno: Objeto simples de chave-valor com as métricas consolidadas.
+
+GET /kpis/timeseries
+Objetivo: Alimentar gráficos de linha e barras (RF009).
+Query Params: metric (ex: costs, profits, deviations), interval (ex: daily, monthly).
+Retorno: Array de pontos de dados ([ { "date": "2026-04", "value": 150000 }, ... ]).
+
+GET /dashboard/summary
+Objetivo: Um endpoint para a tela inicial do Gestor.
+Retorno: Um snapshot consolidado juntando um pouco de tudo: número de projetos ativos no mês, total orçado e, criticamente, uma lista resumida de alertas (ex: insumos defasados - RF014).
+
+
