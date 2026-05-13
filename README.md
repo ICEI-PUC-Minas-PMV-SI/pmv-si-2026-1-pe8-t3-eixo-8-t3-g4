@@ -19,7 +19,7 @@ Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo de
 * Phelipe Octavio Antunes Silva 
 
 
-## Orientador
+## Orientadora
 
 * Simone Fernandes Queiroz
 
